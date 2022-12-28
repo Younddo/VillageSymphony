@@ -1,0 +1,121 @@
+package kr.co.symphony.pay;
+
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class PayCont {
+	
+private PayDAO dao = null;
+	
+	public PayCont() {
+		
+		dao = new PayDAO();
+		System.out.println("------PayCont() 객체 생성됨");		
+	}
+	
+	@RequestMapping(value = "cartproc.do", method = RequestMethod.POST) 
+	public ModelAndView cartProc(@ModelAttribute PayDTO dto) {
+
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("pay/msgView"); 	
+	
+		int cnt=dao.create(dto);						
+		
+		if(cnt==0) {
+			String msg="장바구니에 실패했습니다.";		
+			
+			mav.addObject("msg", msg );
+			mav.addObject("url", "/lessondetail.do" );	
+	
+			}else {
+			String msg="글쓰기에 성공했습니다.";
+			
+			mav.addObject("msg", msg );
+			mav.addObject("url", "/cart.do" );
+		}//if end
+		return mav;	
+	}//create() end
+	
+	//장바구니 페이지
+	@RequestMapping("cart.do")
+	public ModelAndView list(HttpSession session) {
+		
+		ModelAndView mav = new ModelAndView();
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<PayDTO> items = (ArrayList<PayDTO>) session.getAttribute("check");
+		
+		if(items != null) {
+			
+			ArrayList<PayDTO> list = new ArrayList<PayDTO>(); 
+			
+			for(int i = 0; i < items.size(); i++) {
+				
+				PayDTO pay = new PayDTO();
+				pay.setC_id(items.get(i).getC_id());
+				pay.setC_title(items.get(i).getC_title());
+				pay.setC_time(items.get(i).getC_time());
+				pay.setC_date(items.get(i).getC_date());
+				pay.setPrice(items.get(i).getPrice());
+				pay.setName(dao.name(items.get(i).getC_id()));
+				
+				list.add(pay);
+				
+			}
+			
+			mav.addObject("list", list);
+			
+		}
+		
+		mav.setViewName("payment/cart");
+
+		return mav;
+	}// list() end
+	
+	//주문
+	@RequestMapping(value = "pay.do", method = RequestMethod.POST) 
+	public ModelAndView pay(@ModelAttribute PayListDTO dtos, HttpSession session) {
+		System.out.println("pay.do >>>>> pay");
+		
+		ModelAndView mav = new ModelAndView();
+		
+		String id = (String) session.getAttribute("c_id");
+		
+		if(id != null) {
+			if(dtos != null) {
+				ArrayList <PayDTO> newDtos = dtos.getDtos();
+				
+				if(newDtos != null) {
+					
+					PayDTO dto = newDtos.get(0);
+					int pay = dto.getPrice() * newDtos.size();
+					
+					PaymentDTO payment = new PaymentDTO();
+					payment.setC_id(dto.getC_id());	//강의 아이디
+					payment.setId(id);				//구매자 아이디
+					payment.settPay(pay);
+					
+					dao.insPayment(payment);
+					
+					mav.addObject("list", newDtos);
+				}
+			}
+
+			mav.setViewName("payment/cart");
+		
+		}else {
+			mav.setViewName("payment/cart");
+		}
+
+		return mav;	
+	}//pay() end
+	
+}

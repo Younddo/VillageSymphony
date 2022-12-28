@@ -1,0 +1,9 @@
+package kr.co.symphony.pay;
+
+import java.util.ArrayList;
+
+public class PayListDTO {
+
+	private ArrayList<PayDTO> dtos;
+	
+}

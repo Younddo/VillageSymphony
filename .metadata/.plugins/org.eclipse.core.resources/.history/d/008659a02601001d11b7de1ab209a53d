@@ -1,0 +1,112 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%@ page import="kr.co.symphony.member.*"%>
+    
+<!DOCTYPE HTML>
+<html lang="kor">
+	<head>
+	<meta charset="utf-8">
+	<title>Village Symphony &mdash; 맞춤형 음악 강의, 빌리지심포니</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="author" content="freehtml5.co" />
+
+
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400" rel="stylesheet">
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="css/flexslider.css">
+
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/style.css">
+	
+		<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Stellar Parallax -->
+	<script src="js/jquery.stellar.min.js"></script>
+	<!-- Carousel -->
+	<script src="js/owl.carousel.min.js"></script>
+	<!-- Flexslider -->
+	<script src="js/jquery.flexslider-min.js"></script>
+	<!-- countTo -->
+	<script src="js/jquery.countTo.js"></script>
+	
+	
+	<!-- Main -->
+	<script src="js/main.js"></script>
+
+
+
+
+	</head>
+	<body>
+	
+<%
+	//세션의 회원정보 가져오기
+	//로그인 성공시 info라는 이름으로 담아준 세션의 정보가있고, 로그인 실패 or 하지않은상태라면 null
+	//가져오는 데이터타입이 MemberDTO 
+	
+	MemberDTO info = (MemberDTO)session.getAttribute("info");
+	
+
+%>
+		
+	<div class="fh5co-loader"></div>
+	
+
+	<div id="page">
+	<nav class="fh5co-nav" role="navigation">
+		
+		<div class="top-menu">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-2">
+						<div id="fh5co-logo"><a href="home.do"><i class="icon-study"></i><span>village symphony</span></a></div>
+					</div>
+					<div class="col-xs-10 text-right menu-1">
+						<ul>
+							<li class="active"><a href="home.do">홈</a></li>
+							<li><a href="courses.do">강의찾기</a></li>
+							<li><a href="lessoncreate.do">강사등록</a></li>
+							<li class="has-dropdown">
+								<a href="#">게시판</a>
+								<ul class="dropdown">
+									<li><a href="noticeList.do">공지사항</a></li>
+									<li><a href="eventList.do">이벤트</a></li>
+									<li><a href="reviewList.do">수업후기</a></li>
+									<li><a href="lessonlist.do">강의목록</a></li>
+								</ul>
+							</li>
+							<li><a href="contact.html">문의사항</a></li>
+							<% if(info != null){ %>
+								<li class="btn-cta"><a href="loginform.do"><span>내정보</span></a></li>
+								<li class="btn-cta"><a href="logoutproc.do"><span>로그아웃</span></a></li>
+							<%} else {%>
+								<li class="btn-cta"><a href="loginform.do"><span>로그인</span></a></li>
+								<li class="btn-cta"><a href="agreement.do"><span>회원가입</span></a></li>
+							<%} %>
+						</ul>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</nav>
